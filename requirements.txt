@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+pyngrok
+geopy
+requests
+beautifulsoup4
+sounddevice
+numpy
+faster-whisper
