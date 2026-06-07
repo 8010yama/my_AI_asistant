@@ -1,5 +1,7 @@
 # ALIA - AI音声アシスタント
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 スマートフォンから話しかけると音声で返答するAIアシスタント。天気・電車・地図・メモ・カレンダーに対応。
 
 ## 機能
@@ -67,6 +69,13 @@ curl -X POST https://oauth2.googleapis.com/token \
   -d "code=CODE&client_id=CLIENT_ID&client_secret=CLIENT_SECRET&redirect_uri=http://localhost:8080&grant_type=authorization_code"
 ```
 8. レスポンスの `refresh_token` を `.env` に設定
+
+## 注意事項
+
+- `.env` は絶対にGitにコミットしない
+- ngrokのURLは起動のたびに変わるため、iPhoneショートカットのURL更新が必要
+- Google OAuth トークンは個人利用の範囲で使用する
+- Ollama・VOICEVOXはローカルで別途起動が必要
 
 ## 起動
 
