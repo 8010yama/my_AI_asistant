@@ -3,8 +3,6 @@ import datetime
 import requests
 from bs4 import BeautifulSoup, Comment
 
-# 自分の居住エリアに合わせて設定してください
-# 例: {"区・市名": "最寄り駅名"}
 ADDRESS_TO_STATION = {
     "新宿区": "新宿",
     "渋谷区": "渋谷",
@@ -14,7 +12,6 @@ ADDRESS_TO_STATION = {
     "台東区": "上野",
 }
 
-# 乗換候補駅の設定
 NEIGHBOR_STATION = {
     "新宿": "渋谷",
     "渋谷": "品川",
@@ -215,7 +212,7 @@ def get_train_route(from_station: str, to_station: str, arrive_time: str = None)
                 depart_in = f"\nあと{diff // 60}時間{diff % 60}分で出発（{dep_time}）"
             else:
                 depart_in = f"\nあと{diff}分で出発（{dep_time}）"
-        except:
+        except Exception:
             pass
 
         return (
@@ -250,7 +247,6 @@ def build_train_reply(train_context: str) -> str | None:
                 depart_info = f"{match.group(1)}駅の次の電車です。"
 
         else:
-            # 乗換駅: 「着時刻発時刻駅名 →」の形式
             m = re.search(r"\d{2}:\d{2}着\d{2}:\d{2}発(\S+?) →", line)
             if m:
                 station = re.sub(r"[\(（].*", "", m.group(1)).strip()

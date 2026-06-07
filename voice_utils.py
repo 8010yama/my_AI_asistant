@@ -1,8 +1,6 @@
 import requests
 
 SPEAKER_ID = 14
-# SPEAKER_ID = 42 
-# #ひげじい
 
 def text_to_speech(text: str) -> bytes:
     try:
@@ -19,5 +17,5 @@ def text_to_speech(text: str) -> bytes:
             timeout=10
         )
         return audio.content if audio.status_code == 200 else b""
-    except:
+    except Exception:
         return b""

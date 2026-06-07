@@ -12,17 +12,14 @@ TODO_KEYWORDS = ["todoに追加", "タスクに追加", "やることリスト",
 MEMO_KEYWORDS = ["メモして", "覚えておいて", "書いておいて", "ノートに書いて", "記録して", "メモお願い"]
 
 def _normalize(text: str) -> str:
-    """小文字化＋スペース除去で音声認識のブレを吸収"""
     return text.lower().replace(" ", "").replace("　", "")
 
 def detect_memo_type(text: str):
-    """Returns 'todo', 'memo', or None"""
     normalized = _normalize(text)
     if any(k in normalized for k in TODO_KEYWORDS):
         return "todo"
     if any(k in text for k in MEMO_KEYWORDS):
         return "memo"
-    # 「メモ〇〇」(音声認識で「して」が落ちたケース)。メモリ・メモリアルは除外
     if re.match(r'^メモ(?!リ)', text):
         return "memo"
     return None

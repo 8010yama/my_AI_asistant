@@ -18,7 +18,6 @@ WEEKDAY_MAP = {"月": 0, "火": 1, "水": 2, "木": 3, "金": 4, "土": 5, "日"
 
 
 def detect_calendar_type(text: str):
-    """Returns 'add', 'read', 'update', or None"""
     if any(k in text for k in UPDATE_KEYWORDS):
         return "update"
     if any(k in text for k in ADD_KEYWORDS):
@@ -72,7 +71,6 @@ def _parse_date(text: str) -> datetime.date:
 
 
 def _parse_time(text: str):
-    """Returns (hour, minute) or None. 午後・午前優先、次に数字のみ"""
     m = re.search(r'午後(\d{1,2})時(?:(\d{1,2})分)?', text)
     if m:
         hour = int(m.group(1))
@@ -83,9 +81,7 @@ def _parse_time(text: str):
         hour = int(m.group(1))
         return (0 if hour == 12 else hour), int(m.group(2) or 0)
 
-    # 「〜まで」の時刻を除いた最初の時刻を開始時刻として取得
     for m in re.finditer(r'(\d{1,2})時(?:(\d{1,2})分)?', text):
-        # 「まで」が直後に続く場合は終了時刻なのでスキップ
         end = m.end()
         if text[end:end+2] == "まで":
             continue
@@ -95,24 +91,19 @@ def _parse_time(text: str):
 
 
 def _parse_end_time(text: str):
-    """「〜時まで」または「〜時間」から終了時刻オフセット(分)を返す"""
-    # 「X時からY時の間」パターン → Y時を終了時刻として取得
     m = re.search(r'\d{1,2}時から(\d{1,2})時(?:(\d{1,2})分)?(?:の間|まで)', text)
     if m:
         return ("absolute", int(m.group(1)), int(m.group(2) or 0))
 
-    # X時まで / X時の間 → 絶対終了時刻
     m = re.search(r'(\d{1,2})時(?:(\d{1,2})分)?(?:まで|の間)', text)
     if m:
         return ("absolute", int(m.group(1)), int(m.group(2) or 0))
 
-    # X時間 → 相対duration
     m = re.search(r'(\d+)時間(?:(\d+)分)?', text)
     if m:
         minutes = int(m.group(1)) * 60 + int(m.group(2) or 0)
         return ("relative", minutes)
 
-    # X分 のみ（「9時30分」のような時刻内の分は除外）
     m = re.search(r'(?<!時)(\d+)分', text)
     if m:
         return ("relative", int(m.group(1)))
@@ -121,7 +112,6 @@ def _parse_end_time(text: str):
 
 
 def extract_event_info(text: str) -> tuple:
-    """Returns (title, start_dt, end_dt, has_time)"""
     date = _parse_date(text)
     time = _parse_time(text)
     end_info = _parse_end_time(text)
@@ -159,7 +149,6 @@ def extract_event_info(text: str) -> tuple:
 
 
 def extract_update_info(text: str):
-    """Returns (date, start_hour, start_minute, new_end_dt) or None"""
     date = _parse_date(text)
     time = _parse_time(text)
     end_info = _parse_end_time(text)
@@ -214,7 +203,6 @@ def add_to_calendar(title: str, start_dt: datetime.datetime, end_dt: datetime.da
 
 
 def update_calendar_event(date: datetime.date, start_hour: int, start_minute: int, new_end_dt: datetime.datetime) -> tuple:
-    """Returns (success, event_title)"""
     events = get_calendar_events(date)
     matching = [
         e for e in events

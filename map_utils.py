@@ -25,7 +25,6 @@ def extract_nav_destination(text: str) -> str | None:
         m = re.search(pat, text)
         if m:
             dest = m.group(1).strip()
-            # 助詞・不要語を除去
             dest = re.sub(r'^(?:の|に|へ|で|を|から|は|が)', '', dest)
             if dest and dest not in skip:
                 return dest

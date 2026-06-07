@@ -23,12 +23,12 @@ def _get_daily_forecast(lat, lon):
 
     avg_temp = data["daily"]["temperature_2m_mean"][0]
 
-    RAIN_THRESHOLD = 0.5  # mm/h未満は無視
+    RAIN_THRESHOLD = 0.5
     rain_start = None
     for t, p in zip(data["hourly"]["time"], data["hourly"]["precipitation"]):
         hour = int(t[11:13])
         if p >= RAIN_THRESHOLD and hour > now_hour and rain_start is None:
-            rain_start = t[11:16]  # 未来の時刻のみ参照
+            rain_start = t[11:16]
 
     return avg_temp, rain_start
 

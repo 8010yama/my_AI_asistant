@@ -49,5 +49,5 @@ async def transcribe(
 
 if __name__ == "__main__":
     listener = ngrok.forward(8000, authtoken=NGROK_TOKEN)
-    print(f"✅ 外部URL: {listener.url()}")
+    print(f"外部URL: {listener.url()}")
     uvicorn.run(app, host="0.0.0.0", port=8000)
